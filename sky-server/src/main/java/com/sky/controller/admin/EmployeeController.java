@@ -91,8 +91,17 @@ public class EmployeeController {
         log.info("分页查询员工:{}",employeePageQueryDTO);
         PageResult PageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(PageResult);
-
     }
+    /*
+    启用/停用员工
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id){
+        log.info("启用/停用员工:{}",id);
+        employeeService.startOrStop(status,id);
+        return Result.success();
+    }
+
 
 
 
