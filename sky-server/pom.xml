@@ -115,6 +115,13 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
         </dependency>
+        <!-- 临时注释：验证 actuator 是否为 springfox NPE 根因 -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        -->
     </dependencies>
 
     <build>

@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   profiles:
     active: dev
   main:
@@ -37,3 +40,5 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+
