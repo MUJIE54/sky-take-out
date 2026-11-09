@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
+import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
@@ -38,4 +39,11 @@ public interface DishMapper {
 //根据菜品id删除套餐菜品关联关系
     @Delete("delete from setmeal_dish where dish_id = #{id}")
     void deleteById(Long id);
+/*
+ * 修改菜品表基本信息
+ */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
+
+
 }
