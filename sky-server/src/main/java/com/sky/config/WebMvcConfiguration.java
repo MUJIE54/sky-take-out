@@ -93,6 +93,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        //菜品图片本地映射
+        registry.addResourceHandler("/images/**").addResourceLocations("file:D:/develop/SkyTakeout/upload/images/");
     }
     /**
      * 拓展Spring MVC框架 的消息转换器
