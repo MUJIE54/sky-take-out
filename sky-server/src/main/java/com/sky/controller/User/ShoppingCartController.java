@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 /*
    购物车
     */
@@ -29,7 +32,14 @@ public class ShoppingCartController {
         log.info("添加购物车：{}", shoppingCartDTO);
         shoppingCartService.addShoppingCart(shoppingCartDTO);
         return Result.success();
-
+    }
+    /**
+     * 查看购物车
+     * @return
+     */
+    public Result<List<ShoppingCart>> list(){
+        List<ShoppingCart> list = shoppingCartService.showShopping();
+        return Result.success(list);
     }
 
 
