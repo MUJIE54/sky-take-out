@@ -106,4 +106,71 @@ public class ReportServiceImpl implements ReportService {
                 .newUserList(StringUtils.join(newUserList, ","))
                 .build();
     }
+
+    /**
+     * 根据时间区间统计订单数量
+     * @param begin
+     * @param end
+     * @return
+     */
+    public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
+        //当前集合用于存放从begin到end的日期日期列表
+        List<LocalDate> dateList = new ArrayList<>();
+        dateList.add(begin);
+
+        while (!begin.equals(end)){
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+        //每天订单总数集合
+        List<Integer> orderCountList = new ArrayList<>();
+        //每天有效订单数集合
+        List<Integer> validOrderCountList = new ArrayList<>();
+        //遍历dateList集合，查询每天的有效订单数和订单总数
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            //查询每天的订单总数 select count(id) from orders where order_time>? and order_time<?
+
+            Integer orderCount = getOrderCount(beginTime, endTime, null);
+
+            //查询每天的有效订单数 select count(id) from orders where order_time>? and order_time<? and status=5
+            Integer validOrderCount = getOrderCount(beginTime, endTime, Orders.COMPLETED);
+            orderCountList.add(orderCount);
+            validOrderCountList.add(validOrderCount);
+                   }
+        //计算时间区间内的订单总数
+        Integer totalOrderCount = orderCountList.stream().reduce(Integer::sum).get();
+
+        //计算时间区间内的有效订单总数
+        Integer validOrderCount = validOrderCountList.stream().reduce(Integer::sum).get();
+        //计算订单完成率
+        Double orderCompletionRate = 0.0;
+        if (totalOrderCount != 0) {
+            orderCompletionRate = validOrderCount.doubleValue() / totalOrderCount.doubleValue();
+        }
+
+        return OrderReportVO
+                .builder().dateList(StringUtils.join(dateList, ","))
+                .orderCountList(StringUtils.join(orderCountList, ","))
+                .validOrderCountList(StringUtils.join(validOrderCountList, ","))
+                .totalOrderCount(totalOrderCount)
+                .validOrderCount(validOrderCount)
+                .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+    /**
+     * 根据时间区间统计指定状态的订单数量
+     * @param beginTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    private Integer getOrderCount(LocalDateTime beginTime, LocalDateTime endTime, Integer status) {
+        Map map = new HashMap();
+        map.put("status", status);
+        map.put("begin", beginTime);
+        map.put("end", endTime);
+        return orderMapper.countByStatusMap(map);
+    }
 }

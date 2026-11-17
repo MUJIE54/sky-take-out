@@ -51,5 +51,18 @@ public class ReportController {
         log.info("根据时间区间统计用户，begin：{}，end：{}", begin, end);
         return Result.success(reportService.getUserStatistics(begin, end));
     }
+    /**
+     * 订单数据统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @GetMapping("/ordersStatistics")
+    public Result<OrderReportVO> orderStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end){
+        log.info("订单数据统计，begin：{}，end：{}", begin, end);
+        return Result.success(reportService.getOrderStatistics(begin, end));
+    }
 
 }
