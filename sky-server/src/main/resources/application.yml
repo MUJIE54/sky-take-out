@@ -21,7 +21,7 @@ spring:
     host: ${sky.redis.host}
     port: ${sky.redis.port}
     password: ${sky.redis.password}
-    datebase: ${sky.redis.datebase}
+    database: ${sky.redis.database}
 
 
 mybatis:

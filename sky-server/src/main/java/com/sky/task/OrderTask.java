@@ -2,9 +2,10 @@ package com.sky.task;
 
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
-import com.sky.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class OrderTask {
+public class OrderTask implements ApplicationRunner {
     @Autowired
     private OrderMapper orderMapper;
 
@@ -42,8 +43,9 @@ public class OrderTask {
 
     /**
      * 处理"派送中"状态的订单
+     * 每天晚上22点触发一次，自动完成下单超过1小时仍处于派送中的订单
      */
-    @Scheduled(cron = "0 0 1 * * ?")//每天凌晨一点触发一次
+    @Scheduled(cron = "0 0 22 * * ?")//每天晚上22点触发一次
     public void processDeliveryOrder() {
         log.info("处理派送中订单：{}", new Date());
         // select * from orders where status = 4 and order_time < 当前时间-1小时
@@ -55,5 +57,15 @@ public class OrderTask {
                 orderMapper.update(order);
             });
         }
+    }
+
+    /**
+     * 项目启动时立即执行一次派送中订单处理，
+     * 防止错过定时触发时间导致积压的订单永远无法被处理
+     */
+    @Override
+    public void run(ApplicationArguments args) {
+        log.info("启动时处理一次派送中订单");
+        processDeliveryOrder();
     }
 }
