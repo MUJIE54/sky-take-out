@@ -9,6 +9,9 @@
 logs/
 *.log
 
+# 本机真实配置，禁止提交
+sky-server/src/main/resources/application-local.yml
+
 # 证书私钥，禁止提交
 *.pem
 *.p12

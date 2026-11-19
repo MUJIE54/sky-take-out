@@ -88,7 +88,7 @@ sky:
     secret: <YOUR_WECHAT_SECRET>
 ```
 
-> 说明：仓库里提交的都是占位符，真实密钥请只在自己电脑上填写，不要提交回 GitHub。
+> 说明：仓库里提交的都是占位符。真实密钥建议写在 `sky-server/src/main/resources/application-local.yml`，该文件已被 `.gitignore` 忽略；`application.yml` 默认激活了 `dev,local` 两个 profile，后者的同项配置会覆盖前者，这样值不会误传到 GitHub。直接改 `application-dev.yml` 也能跑，但要注意别把真实值提交上去。
 
 ### 4. 启动后端
 
