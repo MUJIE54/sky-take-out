@@ -5,6 +5,7 @@ import com.sky.entity.Orders;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.SetmealMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
 import com.sky.vo.DishOverViewVO;
@@ -24,6 +25,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private DishMapper dishMapper;
     @Autowired
@@ -69,8 +72,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             unitPrice = turnover / validOrderCount;
         }
 
-        //新增用户数
-        Integer newUsers = orderMapper.countByMap(map);
+        //新增用户数（用独立的 map，避免把订单的 status 污染到用户统计里）
+        Map userMap = new HashMap();
+        userMap.put("begin", begin);
+        userMap.put("end", end);
+        Integer newUsers = userMapper.countByMap(userMap);
 
         return BusinessDataVO.builder()
                 .turnover(turnover)
